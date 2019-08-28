@@ -1,0 +1,15 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "peru/ubuntu-18.04-desktop-amd64"
+  config.vm.box_version = "20190801.01"
+
+  # Run ansible from the vagrant host
+  config.vm.provision "ansible" do |ansible|
+    ansible.playbook = "./provision/ansible/playbook.yml"
+    ansible.verbose = true
+  end
+end
+
+
