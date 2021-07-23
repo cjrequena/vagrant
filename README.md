@@ -1,6 +1,5 @@
 # Vagrant Machines
 
-
 ## Requirements
 
 The following software must be installed/present on your local machine to build the Vagrant box file:
@@ -10,12 +9,11 @@ The following software must be installed/present on your local machine to build 
 
 ### On MacOSX
  
-- [Homebrew setup](https://sourabhbajaj.com/mac-setup/Homebrew/)  
-- [Brew cask setup](https://sourabhbajaj.com/mac-setup/Homebrew/Cask.html)    
-- [Vagrant setup](https://sourabhbajaj.com/mac-setup/Vagrant/README.html)     
-- [Ansible brew setup](https://formulae.brew.sh/formula/ansible)    
   ```shell
-  $ sudo brew install ansible
+  $ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  $ brew install --cask virtualbox
+  $ brew install --cask vagrant
+  $ brew install ansible
+  $ vagrant plugin install vagrant-vbguest
+  $ vagrant up
   ```
-
-### On Windows

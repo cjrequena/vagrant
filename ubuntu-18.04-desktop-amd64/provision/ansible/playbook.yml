@@ -11,24 +11,20 @@
         autoremove: yes
         autoclean: yes
         purge: yes
-
     # Install add-apt-repostory
     - name: Install add-apt-repostory
       become: yes
       apt: name=software-properties-common state=latest
-
     # Install Open JDK 8
     - name: Install openJDK 8
       become: yes
       apt:
         name: ['openjdk-8-jdk','openjdk-8-jre']
         state: latest
-
     # Set update-java-alternatives
     - name: Set update-java-alternatives
       become: yes
       shell: update-java-alternatives --set /usr/lib/jvm/java-1.8.0-openjdk-amd64
-
     # Set JAVA_HOME environment variable
     - name: Set JAVA_HOME environment variable
       lineinfile:
@@ -38,7 +34,6 @@
       with_items:
         - { regexp: 'export JAVA_HOME.*', line: 'export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64' }
         - { regexp: 'export PATH=$PATH:$JAVA_HOME/bin', line: 'export PATH=$PATH:$JAVA_HOME/bin' }
-
     # Install list of dependency packages
     - name: Install list of dependency packages
       become: yes
@@ -51,29 +46,6 @@
           - gcc
           - git
           - git-core
-          - snapd
-
-    # ---- Oracle JDK 8
-#    - name: Add Oracle Java Repository
-#      become: yes
-#      apt_repository: repo='ppa:webupd8team/java'
-#    - name: Accept Java 8 License
-#      become: yes
-#      debconf: name='oracle-java8-installer' question='shared/accepted-oracle-license-v1-1' value='true' vtype='select'
-#    - name: Install Oracle Java 8
-#      become: yes
-#      apt:
-#        name: "{{item}}"
-#        state: latest
-#      with_items:
-#        - oracle-java8-installer
-#        - ca-certificates
-#        - oracle-java8-set-default
-#    - name: Set JAVA_HOME environment variable
-#      lineinfile:
-#        dest: /home/vagrant/.bashrc
-#        regexp: "{{ item.regexp }}"
-#        line: "{{ item.line }}"
-#      with_items:
-#        - { regexp: 'export JAVA_HOME.*', line: 'export JAVA_HOME=/usr/lib/jvm/java-8-oracle' }
-#        - { regexp: 'export PATH=$PATH:$JAVA_HOME/bin', line: 'export PATH=$PATH:$JAVA_HOME/bin' }
+          - virtualbox-guest-dkms
+          - virtualbox-guest-utils
+          - virtualbox-guest-x11
