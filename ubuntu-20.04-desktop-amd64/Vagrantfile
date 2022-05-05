@@ -5,8 +5,8 @@
 VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-  config.vm.box = "peru/ubuntu-18.04-desktop-amd64"
-  config.vm.box_version = "20211016.01"
+  config.vm.box = "peru/ubuntu-20.04-desktop-amd64"
+  config.vm.box_version = "20220502.01"
   config.vm.hostname = "ubuntu-bionic-beaver"
   config.vm.provider "virtualbox" do |vb|
     vb.name = "ubuntu-bionic-beaver"
