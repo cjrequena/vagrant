@@ -1,0 +1,86 @@
+---
+- hosts: all
+  become: true
+  vars_files:
+    - vars/default.yml
+
+  tasks:
+    # Update and upgrade apt packages
+    - name: Update and upgrade apt packages
+      become: true
+      apt:
+        upgrade: yes
+        update_cache: yes
+        cache_valid_time: 86400 #One day
+        autoremove: yes
+        autoclean: yes
+        purge: yes
+      tags: update
+
+    # Install add-apt-repository
+    - name: Install add-apt-repostory
+      become: true
+      apt: name=software-properties-common state=latest
+
+    # Install aptitude using apt
+    - name: Install aptitude using apt
+      apt: name=aptitude state=latest update_cache=yes force_apt_get=yes
+
+    # Install list of dependency packages
+    - name: Install list of dependency packages
+      become: true
+      apt:
+        name: "{{ packages }}"
+        update_cache: yes
+        state: latest
+      vars:
+        packages:
+          - build-essential
+          - gcc
+          - git
+          - git-core
+          - virtualbox-guest-dkms
+          - virtualbox-guest-utils
+          - virtualbox-guest-x11
+          - python3-pip
+          - virtualenv
+          - python3-setuptools
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+          - postfix
+          - openssh-server
+
+    # Install docker
+    - name: Install docker
+      import_tasks: docker-ubuntu-playbook.yml
+      tags: docker
+
+    # Install Gitlab on Linux node
+    - name: Install Gitlab on Linux node
+      import_tasks: gitlab-ubuntu-playbook.yml
+      tags: gitlab
+
+    # Configure Gitlab Container Registry
+    - name: Configure Gitlab Container Registry
+      import_tasks: gitlab-registry-playbook.yml
+      tags: registry
+
+    # Install & Register Gitlab Runner for Docker
+    - name: Install & Register Gitlab Runner for Docker
+      import_tasks: gitlab-runner-playbook.yml
+      tags: runner
+
+    # Configure Gitlab Pages
+    - name: Configure Gitlab Pages
+      import_tasks: gitlab-pages-playbook.yml
+      tags: pages
+
+    - name: Congratulations!
+      debug:
+        msg:
+          - "Your Gitlab instance is ready at {{ gitlab_url }}"
+          - "The Gitlab Container Registry is waiting for your docker pushes at {{ gitlab_registry_url}}"
+          - "Gitlab Pages are served at {{ gitlab_pages_url }}"
+          - "Just open your Browser and login!"

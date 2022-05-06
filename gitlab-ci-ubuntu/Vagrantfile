@@ -1,0 +1,36 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.define "gitlab"
+  config.vm.box = "peru/ubuntu-20.04-desktop-amd64"
+  config.vm.box_version = "20220502.01"
+  # Register domain and tld for later access prettiness (working with vagrant-dns Plugin https://github.com/BerlinVagrant/vagrant-dns)
+  config.vm.hostname = "instance"
+  config.dns.tld = "com"
+  # Configure private network and static ip (https://www.vagrantup.com/docs/networking/private_network.html)
+  config.vm.network "private_network", ip: "192.168.56.15"
+  #config.vm.boot_timeout = 600
+  config.vm.provider "virtualbox" do |vb|
+    vb.name = "gitlab"
+    vb.gui = true
+    vb.memory = "4096"
+    vb.cpus = 2
+    vb.customize [ "modifyvm", :id, "--uartmode1", "disconnected" ]
+    vb.customize [ "modifyvm", :id, "--clipboard", "bidirectional"]
+    # Forward DNS resolver from host (vagrant dns) to box
+    vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+  end
+  # Run ansible on vagrant host
+  config.vm.provision "ansible" do |ansible|
+    ansible.playbook = "./provision/ansible/playbook.yml"
+    ansible.verbose = true
+  end
+  # Run shell script on vagrant host
+  config.vm.provision "shell", path: "./provision/shell/test.sh"
+end
+
+

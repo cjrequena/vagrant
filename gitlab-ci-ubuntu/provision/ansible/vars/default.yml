@@ -1,0 +1,12 @@
+---
+create_containers: 4
+default_container_name: docker
+default_container_image: ubuntu
+default_container_command: sleep 1d
+# gitlab variables
+gitlab_domain: "gitlab.instance.com"
+gitlab_url: "http://{{ gitlab_domain }}"
+gitlab_registry_url: "{{ gitlab_url }}:4567"
+gitlab_runner_count: 2
+gitlab_pages_domain: "gitlab-pages.instance.com"
+gitlab_pages_url: "http://{{ gitlab_pages_domain }}"
